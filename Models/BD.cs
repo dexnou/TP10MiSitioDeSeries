@@ -30,10 +30,21 @@ private static string _connectionString = @"Server=.;DataBase=BDSeries;Trusted_C
         using (SqlConnection db = new SqlConnection(_connectionString))
         {
             string sql = "SELECT * FROM Temporadas WHERE IdSerie = @pIdSerie";
-            listaTemporadas = db.Query<Candidato>(sql, new { pIdSerie = IdSerie }).ToList();
+            listaTemporadas = db.Query<Temporadas>(sql, new { pIdSerie = IdSerie }).ToList();
         }
         return listaTemporadas; 
     }
+
+    public static Series VerSerie(int IdSerie)
+        {
+            Series sActual = null;
+            using (SqlConnection db = new SqlConnection(_connectionString))
+            {
+                string sql = "SELECT * FROM Series WHERE IdSerie = @pIdSerie";
+                sActual = db.QueryFirstOrDefault<Series>(sql,new {pIdSerie = IdSerie});
+            }
+            return sActual;
+        }
 
 
 

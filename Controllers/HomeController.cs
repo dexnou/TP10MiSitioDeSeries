@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using TP10MiSitioDeSeries.Models;
 
 namespace TP10MiSitioDeSeries.Controllers;
 
@@ -10,12 +11,17 @@ public class HomeController : Controller
         return View();
     }
 
-    public IActionResult VerDetallesActores(int IdActor){
-        return BD.VerActores(IdActor);
+    public List<Actores> VerDetallesActores(int IdSerie){
+        return BD.VerActores(IdSerie);
     }
     
-    public IActionResult VerDetallesTemporadas(int IdTemporada){
-        return BD.VerTemporadas(IdTemporada);
+    public List<Temporadas> VerDetallesTemporadas(int IdSerie){
+        return BD.VerTemporadas(IdSerie);
+    }
+
+    public Series VerDetallesSerie(int IdSerie){
+
+        return BD.VerSerie(IdSerie);
     }
 
 

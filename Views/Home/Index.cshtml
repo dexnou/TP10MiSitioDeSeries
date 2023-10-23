@@ -11,29 +11,83 @@ function MostrarTemporadas(IdS) {
         data: { IdSerie: IdS },
         success: function (response) {
             // Suponiendo que response es un objeto JSON que contiene datos de temporadas
+            $("#NombreS").html(response.nombre);
             for (const temporada of response) {
-                $("#TituloDeLaTemporada").html(temporada.TituloTemporada);
-                $("#NumeroTemporada").html(temporada.NumeroTemporada);
+                $("#Titulo").html(temporada.tituloTemporada);
+                $("#Numero").html(temporada.numeroTemporada);
             }
         }
     });
 }
 
-function MostrarActores(IdS) {
+function MostrarActores(IdS, Nombre) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: '/Home/VerDetallesActores',
-        data: { IdSerie: IdS },
+        data: { IdSerie: IdS, Nombre : Nombre },
         success: function (response) {
+            $("#NombreS").html(Nombre);
+
             for (const actor of response) {
-                $("#NombreActor").html(actor.Nombre);
+                
+                $("#NombreA").html(actor.nombre);
             }
         }
     });
 }
 
-
+function MostrarSerie(IdS) {
+    $.ajax({
+        type: 'POST',
+        dataType: 'JSON',
+        url: '/Home/VerDetallesSerie',
+        data: { IdSerie: IdS },
+        success: function (response) {
+            $("#NombreS").html(response.nombre);
+            $("#AñoInicio").html(response.añoInicio);
+            $("#Sinopsis").html(response.sinopsis);
+            $("#ImagenSerie").attr("src", "/"+response.imagenSerie);
+ 
+        }
+    });
+}
 </script>
 
-<h1>TP XX - Index</h1>
+
+<h1>Nuestras Series - TP10 - Noah Rotbard y Martin Sedam</h1>
+<h2>¡BIENVENIDO!</h2>
+@foreach(Series s in ViewBag.ListaSeries){
+    <div class="card" style="width: 18rem;">
+        <img src="@s.ImagenSerie" class="card-img-top" alt="Imagen Serie">
+        <div class="card-body">
+        <h5 class="card-title">@s.Nombre</h5>
+        <p class="card-text">@s.Sinopsis</p>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarActores(@s.IdSerie, @s.Nombre)">Ver Actores</a>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarTemporadas(@s.IdSerie)">Ver Temporadas</a>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarSerie(@s.IdSerie)">Ver Mas Info Serie</a>
+        </div>
+    </div>
+}
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="NombreS">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        
+              </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
