@@ -3,52 +3,54 @@
 }
 
 <script>
-function MostrarTemporadas(IdS) {
+function MostrarTemporadas(IdS, nombre) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: '/Home/VerDetallesTemporadas',
         data: { IdSerie: IdS },
         success: function (response) {
-            // Suponiendo que response es un objeto JSON que contiene datos de temporadas
-            $("#NombreS").html(response.nombre);
+            let temporadas="";
+            $("#NombreS").html("Cantidad de Temporadas de " + nombre + ": " + response.length);
             for (const temporada of response) {
-                $("#Titulo").html(temporada.tituloTemporada);
-                $("#Numero").html(temporada.numeroTemporada);
+                temporadas = temporadas + temporada.tituloTemporada + "<br>"
             }
+            $("#Body").html(temporadas)
         }
     });
 }
 
-function MostrarActores(IdS, Nombre) {
+function MostrarActores(IdS,nombre){
     $.ajax({
-        type: 'POST',
-        dataType: 'JSON',
-        url: '/Home/VerDetallesActores',
-        data: { IdSerie: IdS, Nombre : Nombre },
-        success: function (response) {
-            $("#NombreS").html(Nombre);
-
-            for (const actor of response) {
-                
-                $("#NombreA").html(actor.nombre);
-            }
-        }
-    });
+            type: 'GET',
+            datatype: 'JSON',
+            url: '/Home/VerDetallesActores',
+            data: {IdSerie: IdS},
+            success:
+                function(response){
+                    console.log(response)
+                    let actores="";
+                    $("#NombreS").html("Cantidad de Actores "+ nombre + ": " + response.length);
+                    for(const actor of response){
+                        actores = actores + actor.nombre + "<br>"
+                    }
+                    $("#Body").html(actores);
+                }
+        });
 }
 
-function MostrarSerie(IdS) {
+function MostrarSerie(IdS, nombre) {
     $.ajax({
         type: 'POST',
         dataType: 'JSON',
         url: '/Home/VerDetallesSerie',
         data: { IdSerie: IdS },
         success: function (response) {
-            $("#NombreS").html(response.nombre);
+            $("#NombreS").html("Más info de la serie " + response.nombre);  
+            $("#Body").html("Nombre de la serie: " + nombre + "<br>" + "Año de Inicio: " + response.añoInicio + "<br>" + "Sinopsis: " + response.sinopsis + "<br>")
             $("#AñoInicio").html(response.añoInicio);
             $("#Sinopsis").html(response.sinopsis);
             $("#ImagenSerie").attr("src", "/"+response.imagenSerie);
- 
         }
     });
 }
@@ -63,9 +65,9 @@ function MostrarSerie(IdS) {
         <div class="card-body">
         <h5 class="card-title">@s.Nombre</h5>
         <p class="card-text">@s.Sinopsis</p>
-        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarActores(@s.IdSerie, @s.Nombre)">Ver Actores</a>
-        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarTemporadas(@s.IdSerie)">Ver Temporadas</a>
-        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarSerie(@s.IdSerie)">Ver Mas Info Serie</a>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarActores(@s.IdSerie, '@s.Nombre')">Ver Actores</a>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarTemporadas(@s.IdSerie, '@s.Nombre' )">Ver Temporadas</a>
+        <a href="#" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="MostrarSerie(@s.IdSerie, '@s.Nombre')">Ver Mas Info Serie</a>
         </div>
     </div>
 }
@@ -78,9 +80,9 @@ function MostrarSerie(IdS) {
         <h5 class="modal-title" id="NombreS">Modal title</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        
-              </div>
+      <div class="modal-body" id="Body">
+
+        </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary">Save changes</button>
