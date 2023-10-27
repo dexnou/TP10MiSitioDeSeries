@@ -57,8 +57,14 @@ function MostrarSerie(IdS, nombre) {
 </script>
 
 
-<h1>DexFlix</h1>
-<h2>¡BIENVENIDO!</h2>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 text-center">
+      <h4 class="animate-charcter"> DexFlix</h4>
+    </div>
+  </div>
+</div>
+<div class="card-container">
 @foreach(Series s in ViewBag.ListaSeries){
     <div class="card" style="width: 18rem;">
         <img src="@s.ImagenSerie" class="card-img-top" alt="Imagen Serie">
@@ -71,6 +77,7 @@ function MostrarSerie(IdS, nombre) {
         </div>
     </div>
 }
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -89,6 +96,5 @@ function MostrarSerie(IdS, nombre) {
     </div>
   </div>
 </div>
-
 
 
